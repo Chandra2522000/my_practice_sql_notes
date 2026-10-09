@@ -1,0 +1,425 @@
+create database sql_practice ;-- creating database
+use sql_practice;
+-- Table creation
+create table Employee(
+emp_id int primary key auto_increment,
+emp_name varchar(100),
+emp_dep varchar(100),
+salary decimal(10,2)); 
+-- Inserting values into tables
+INSERT INTO employee (emp_id, emp_name, emp_dept, salary)
+VALUES
+(1, 'Chandraleka', 'Data Science', 35000),
+(2, 'Vishnupriya', 'AI', 40000),
+(3, 'Anjali', 'HR', 30000),
+(4, 'Priya', 'Data Science', 45000),
+(5, 'Karthik', 'IT', 38000);
+
+-- viewing table contents
+select*from Employee;
+SELECT emp_name, salary
+FROM Employee
+WHERE salary > 35000; -- where is used to check specific values
+
+SELECT *
+FROM Employee
+WHERE emp_dep = 'Data Science';
+
+UPDATE Employee
+SET salary = 35000
+WHERE emp_id = 3; -- update is used to insert into specific values
+
+SELECT *
+FROM Employee
+WHERE emp_dep = 'AI'
+OR emp_dep= 'HR'; -- or works any one condition is true
+
+SELECT *
+FROM Employee
+WHERE salary BETWEEN 30000 AND 40000; -- AND works both condition is true
+
+SELECT *
+FROM Employee
+ORDER BY salary ASC;
+
+SELECT *
+FROM Employee
+ORDER BY salary DESC
+LIMIT 3; 
+
+SELECT SUM(salary) AS total_salary
+FROM Employee;
+
+SELECT AVG(salary) AS average_salary
+FROM Employee;
+
+SELECT MIN(salary) AS minimum_salary
+FROM Employee;
+
+SELECT MAX(salary) AS highest_salary
+FROM Employee
+WHERE emp_dep = 'Data Science';
+
+SELECT emp_dep, COUNT(*) AS employee_count
+FROM Employee
+GROUP BY emp_dep;
+
+SELECT emp_dep, COUNT(*) AS employee_count
+FROM Employee
+GROUP BY emp_dep
+HAVING COUNT(*) > 1;
+use dm59;
+select*from sales;
+select region,segment,orderid from sales;
+select distinct segment from sales;
+select distinct region from sales;
+select  orderid as id from sales;
+-- find out the data related to technology
+-- sales > 50
+-- quantity < 2
+select*from sales where category = 'technology';
+select*from sales where sales > 50;
+select*from sales where quantity < 2;
+select*from sales where category = 'technology' and state = 'texas';
+select*from sales where segment = 'consumer' and region= 'west' and  sales > 100;
+select*from sales where region = 'east' or region = 'west';
+select*from sales where subcategory = 'phones' or subcategory ='art' or subcategory = 'chairs';
+select*from sales where region != 'south';
+select*from sales where not region = 'south';
+select*from sales where subcategory != 'phones';
+select*from sales where not  subcategory = 'phones';
+select*from sales order by sales;
+select*from sales order by sales desc;
+select str_to_date(orderdate, '%d-%m-%Y')from sales order by str_to_date(orderdate, '%d-%m-%Y');
+select*from sales  where category ='technology' order by quantity desc;
+select*from sales  where category is null;
+select*from sales  where category is not null;
+select*from sales  where region is null;
+select*from sales  where region is not null;
+-- limit = specific value 
+-- find top 5 highest sales
+select* from sales order by sales desc limit  5;
+-- largest sales
+select* from sales order by sales desc limit  1;
+-- second largest
+select* from sales order by sales desc limit  1,1;
+select* from sales order by sales desc limit  2,3;
+select* from sales order by sales desc limit 2 offset 4;
+select* from sales order by sales desc limit 2 offset 9;
+select* from sales order by discount desc limit 2,1;
+select * from sales where subcategory in('Paper','Phones','Art');
+select * from sales where segment in ('Consumer','Homeoffice');
+select * from sales where quantity between 1 and 3;
+select * from sales where sales  between 50 and 100 order by sales desc ;
+-- fetch the sales between 01-01-2014 to 10-02-2015
+select str_to_date(orderdate, '%d-%m-%Y')from sales order by str_to_date(orderdate, '%d-%m-%Y');
+select * from sales where region like 'e___%';
+select * from sales where region like 'e%t';
+select * from sales where region like '%as%';
+select * from sales where region like 'e__t';
+select * from sales where region like 'e%t';
+select * from sales where category like 't%y';
+select * from sales where category like  '%olo%';
+select * from sales where category like  '%y';
+select * from sales where category like  '%no%';
+select max(sales) from sales where region like 'W%t' ;
+select count(distinct subcategory) from sales;
+use dm59;
+select*from sales;
+-- fetch the sales between 01-01-2014 to 10-02-2015
+select * from sales 
+where str_to_date(orderdate, '%d-%m-%Y') between '2014-01-01' and '2015-02-10' order by str_to_date(orderdate, '%d-%m-%Y') asc;
+use dm59;
+select  avg(sales) from sales where subcategory like 'p%';
+select max(sales) from sales where region like 'W%t';
+select min(sales) from sales where subcategory like 'a%t';
+-- find out sum of sales for each region
+select region,round(sum(sales)) from sales group by region;
+select subcategory,avg(sales) from sales group by subcategory;
+select subcategory,avg(sales) as avg_sales from sales group by subcategory having avg_sales>200;
+select subcategory,avg(sales) from sales group by subcategory having avg(sales)>200;
+select * from cars;
+select brand, avg(km_driven) from cars group by brand having avg(km_driven)>140000;
+select owner,count(*) as no_of_cars from cars  group by owner having no_of_cars>5;
+select owner,count(brand) as no_of_cars from cars  group by owner having no_of_cars>5;
+-- find highes price
+select max(selling_price) as highest_price from cars group by brand order by highest_price desc limit 1; 
+select brand,count(brand) as no_of_cars from cars group by brand having no_of_cars>2 order by  no_of_cars desc limit 2;
+select*from phones;
+select brand_name, avg(price) from phones group by brand_name;
+select brand, min(battery_capacity) from phones group by model;
+select brand, max(screen_size) from phones group by model;
+select fast_charging_available, avg(price) as avg_price,min(battery_capacity) as min_capacity,max(screen_size) as max_size from phones group by fast_charging_available;
+ select brand_name,max(ram_capacity) as top from phones group by brand_name order by top desc limit 3;
+ select has_5g ,max(rating) as highest_rating,avg(battery_capacity) as average_capacity from phones group by has_5g;
+ select brand_name,count(*) as no_of_count,avg(price) as costly from phones group by brand_name having no_of_count >10 order by no_of_count;
+ use dm59;
+ select*from users1;
+ select * from membership;
+ select distint(user_id) from membership;
+ select*from users1 t1 join membership t2 on t1.user_id=t2.user_id;
+SELECT 
+    t1.*, 
+    t2.membership_id, 
+    t2.group_id 
+FROM users1 t1 
+JOIN membership t2 
+  ON t1.user_id = t2.user_id;
+SELECT 
+    t1.*, 
+    t2.membership_id, 
+    t2.group_id 
+FROM users1 t1 
+INNER JOIN membership t2 
+  ON t1.user_id = t2.user_id;
+  SELECT 
+    t1.*, 
+    t2.membership_id, 
+    t2.group_id 
+FROM users1 t1 
+LEFT JOIN membership t2 
+  ON t1.user_id = t2.user_id;
+SELECT 
+    t1.*, 
+    t2.membership_id, 
+    t2.group_id 
+FROM users1 t1 
+LEFT JOIN membership t2 
+  ON t1.user_id = t2.user_id;
+SELECT * FROM membership t1 
+LEFT JOIN users1 t2 
+  ON t1.user_id = t2.user_id;
+ select* FROM users1 t1 
+right join membership t2 
+  ON t1.user_id = t2.user_id;
+SELECT * FROM users1 t1 
+LEFT JOIN membership t2 
+  ON t1.user_id = t2.user_id
+union
+select* FROM users1 t1 
+right join membership t2 
+  ON t1.user_id = t2.user_id;
+ select*from membership;
+  select*from g;
+  select* FROM users1 t1 cross join g;
+select* FROM users1 t1 join users1 t2 on t1.user_id = t2.emergency_contact;
+--  create table - dep with
+-- col dep_id, dep_name,location t employee2 ,emp_id ,emp_name,salary, dep_id 
+CREATE TABLE dep (
+    dep_id INT PRIMARY KEY ,
+    dep_name VARCHAR(100) NOT NULL,
+    location VARCHAR(100)
+);
+CREATE TABLE employee3 (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(100) NOT NULL,
+    salary DECIMAL(10, 2),
+    dep_id int,
+    FOREIGN KEY (dep_id) REFERENCES dep(dep_id)
+);
+select * from dep;
+select * from employee3;
+use dm59;
+INSERT INTO dep (dep_id, dep_name, location) VALUES 
+(1, 'AI', 'Dharmapuri'),
+(2, 'DS', 'chennai'),
+(3, 'ME', 'Bangalore'),
+(4, 'IT', 'Bangalore');
+INSERT INTO employee3 (emp_id, emp_name, salary, dep_id) VALUES 
+(101, 'Arun Kumar', 65000.00, 1),   
+(102, 'Priya Sharma', 75000.00, 2),  
+(103, 'Rahul Verma', 55000.00, null),  
+(104, 'Sneha Reddy', 80000.00, 4),   
+(105, 'Amit Singh', 60000.00, 1);  
+
+  SELECT 
+    t2.emp_name, 
+    t1.dep_name
+FROM dep t1 
+left JOIN employee3 t2 
+  ON t1.dep_id = t2.dep_id;
+  SELECT 
+    t2.emp_name
+FROM employee3 t2 
+LEFT JOIN dep t1 
+  ON t2.dep_id = t1.dep_id;
+    SELECT 
+    t2.emp_name,
+    t1.dep_name,
+    t1.location
+FROM employee3 t2 
+right JOIN dep t1 
+  ON t2.dep_id = t1.dep_id;
+  SELECT 
+    t1.dep_name,
+    COUNT(t2.emp_id) AS total_employees
+FROM employee3 t2 
+RIGHT JOIN dep t1 
+  ON t2.dep_id = t1.dep_id group by t1.dep_id,t1.dep_name;
+  SELECT 
+    t1.dep_name,
+	COUNT(t2.emp_id) AS total_employees
+FROM employee3 t2 
+RIGHT JOIN dep t1 
+  ON t2.dep_id = t1.dep_id where t1.dep_name = 'IT';
+   SELECT 
+    t1.dep_name,
+	t2.emp_name
+FROM employee3 t2 
+CROSS JOIN dep t1 
+  ON t2.dep_id = t1.dep_id;
+  SELECT 
+    t2.salary,
+    t1.dep_name,
+    t2.emp_name
+FROM employee3 t2 
+LEFT JOIN dep t1 
+  ON t2.dep_id = t1.dep_id WHERE t2.salary > 60000;
+  select*FROM SALES;
+  SELECT MIN(SALES) FROM SALES;
+  SELECT*FROM SALES WHERE SALES = (SELECT MIN(SALES) FROM SALES);
+  SELECT*FROM SALES WHERE quantity = (SELECT MAX(quantity) FROM SALES);
+   SELECT*FROM SALES WHERE sales>(select avg(sales)  from sales);
+   SELECT * from sales where
+    STR_TO_DATE(orderdate, '%d-%m-%Y') = (SELECT MIN(STR_TO_DATE(orderdate, '%d-%m-%Y')) FROM SALES);
+ SELECT * from sales where
+    STR_TO_DATE(orderdate, '%d-%m-%Y') = (SELECT Max(STR_TO_DATE(orderdate, '%d-%m-%Y')) FROM SALES);
+  SELECT * from sales where
+    customername  = (SELECT min(customername) FROM SALES);  
+    
+    SELECT region from sales where region = (select max(region) FROM SALES);
+    select * from movies;
+    select * from movies where rating = (select max(rating) from movies);
+    -- task 
+USE DM59;
+   SELECT * 
+FROM movies
+ORDER BY released DESC
+LIMIT 1;
+SELECT 
+    SUBSTRING(released, 0, 3831) AS short_title, 
+    released
+FROM movies 
+ORDER BY released DESC 
+LIMIT 1;
+use dm59;
+create table marks (
+student_id int primary key auto_increment,
+name varchar(255),
+branch varchar(255),
+marks int);
+insert into marks (name,branch,marks)values
+('Vishnu','EEE',82),
+('Saran','EEE',91),
+('Anjali','EEE',69),
+('Ranjani','EEE',55),
+('Ram','CSE',78),
+('Ajith','CSE',43),
+('Venkat','CSE',98),
+('Priya','CSE',95),
+('Chandraleka','ECE',95),
+('Peri','ECE',88),
+('Karthick','ECE',81),
+('Snegha','ECE',95),
+('Swetha','MECH',75),
+('Deepika','MECH',69),
+('Neha','MECH',39),
+('Sakthi','MECH',51);
+select*from marks;
+SELECT  branch, marks, AVG(marks) over() as avg_marks
+FROM marks;
+SELECT  branch, marks, AVG(marks) over(partition by branch) as avg_marks
+FROM marks;
+SELECT  branch, marks, max(marks) over(partition by branch) as max_marks
+FROM marks;
+SELECT  name, marks, rank() over(order by marks desc) as stu_rank
+FROM marks;
+SELECT  name, marks, dense_rank() over(order by marks desc) as stu_rank
+FROM marks;
+SELECT  name, marks, row_number() over(order by marks desc) as row_num
+FROM marks;
+SELECT *,row_number() over(partition by branch) as row_num
+FROM marks order by marks;
+select *, concat('branch','_',row_number()over(partition by branch)) from marks;
+SELECT  name, branch,marks, rank() over(partition by branch order by marks desc) as branch_rank
+FROM marks;
+SELECT  name, branch,marks, dense_rank() over(partition by branch order by marks desc) as branch_rank
+FROM marks;
+SELECT  name, marks, sum(marks) over(order by student_id) as running_total from marks;
+SELECT  name, marks, lag(marks) over(order by student_id) as pevious_marks from marks;
+SELECT  name, marks, lead(marks) over(order by student_id) as pevious_marks from marks;
+select *, first_value(marks) over(order by marks desc) from marks;
+select *, last_value(marks) over(order by marks desc) from marks;
+select *, nth_value(name,2) over(partition by branch order by marks) from marks;
+use dm59;
+select*from phones;
+-- group phone by brand get count, avg price, 
+-- max rating , avg screen size aND avg battery capacity
+select brand_name from phones group by brand_name;
+select max(rating) from phones;
+select *, avg(price) over(partition by model) from phones;
+select *, max(price) over(partition by brand_name) from phones;
+select *, min(price) over(partition by model) from phones;
+SELECT COUNT(*) from phones;
+select *,avg(battery_capacity) over(partition by brand_name) from phones;
+select brand_name,count(*) as 'no_phones', 
+avg(price) as 'avg_price', max(rating) as max_rating,avg(screen_size) as
+ avg_screen_size, avg(battery_capacity) as avg_battery_capacity
+ from phones group by brand_name ;
+ select model,count(*) as number_of_phones,avg(price) as avg_price,max(rating) as max_rating,avg(battery_capacity) as avg_capacity,min(screen_size) as minimumscreen from
+ phones group by model;
+ select model,count(*) as number_of_phones,avg(price) as avg_price,max(rating) as max_rating,avg(battery_capacity) as avg_capacity,min(screen_size) as minimumscreen from
+ phones group by model order by avg(price) limit 5;
+ select * from phones;
+ select has_5g, avg(fast_charging) from phones group by has_5g order by avg(fast_charging) limit 1;
+ select brand_name,count(*) as 'count', avg(price) as 'avg_price' from 
+ phones group by brand_name
+ having count > 20 ;
+ select*from users1;
+ select*from membership;
+ select
+ t1.name,
+ t2.membership_id
+ from users1 t1 inner join membership t2 on t1.user_id = t2.user_id ;
+  select
+ t1.name,
+ t1.emergency_contact,
+ t2.membership_id
+ from users1 t1 inner join membership t2 on t1.user_id = t2.user_id ;
+  select
+ t1.name,
+ t1.emergency_contact,
+ t2.membership_id
+ from users1 t1 left join membership t2 on t1.user_id = t2.user_id ;
+  select
+ t1.name,
+ t1.emergency_contact,
+ t2.membership_id
+ from users1 t1 right join membership t2 on t1.user_id = t2.user_id ;
+ 
+SELECT
+    t1.name,
+    t1.age,
+    t1.emergency_contact,
+    t2.membership_id
+FROM users1 t1
+LEFT JOIN membership t2
+    ON t1.user_id = t2.user_id
+
+UNION
+
+SELECT
+    t1.name,
+    t1.age,
+    t1.emergency_contact,
+    t2.membership_id
+FROM users1 t1
+RIGHT JOIN membership t2
+    ON t1.user_id = t2.user_id;
+      select
+ t1.name,
+ t1.emergency_contact,
+ t2.membership_id
+ from users1 t1 cross join membership t2 on t1.user_id = t2.user_id ;
+ select * from movies;
+ select count(*) from movies;
